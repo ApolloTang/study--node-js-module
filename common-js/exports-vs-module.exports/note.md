@@ -42,7 +42,7 @@ NativeModule.wrapper = [
 ];
 ```
 
-(ref: [node-v0.x-archive](https://github.com/nodejs/node-v0.x-archive/blob/832ec1cd507ed344badd2ed97d3da92975650a95/src/node.js#L792-L795)). You can see in above that the variables `exports` and `module` is passed in as formal-parameters of the function.  During execution, this function is being called::
+(ref: [node-v0.x-archive](https://github.com/nodejs/node-v0.x-archive/blob/832ec1cd507ed344badd2ed97d3da92975650a95/src/node.js#L792-L795)). You can see in above that the variables `exports` and `module` is passed in as formal-parameters of the function.  During execution, this function is being called:
 
 ```javascript
 const module = {
@@ -109,12 +109,14 @@ console.log(defaultCjs)
 
 /// file: dependee.cjs (CommonJS)
 module.exports = 'default from CommonJS'
+```
 
+```
 $ node main.mjs
 default from CommonJS
 ```
 
- ⚠️ Be aware the reassignment should always be done on the `module.exports` but not on the `exports` because it is the object `module`  finally being exported from the CommonJS module.  So if we have  reassignment `exports` instead of `module.exports`, you would see the wrong result:
+ ⚠️ Be aware the reassignment should always be done on the `module.exports` but not on the `exports` because it is the object `module` being exported and acquired by the consumer.  So if we had reassign `exports` instead of `module.exports`, you would see the wrong result:
 
 ```javascript
 /// folder: default-export--wrong
@@ -131,9 +133,9 @@ $ node main.mjs
 {}
 ```
 
-You may ask what is the purpose of `exports` if it is the object `module` finally being exported instead of `exports`?
+In the above you see that it is the initial object being exported, not the string `"default from CommonJS"` we had reassigned to the variable `exports`.
 
-This is being asked and explained in the comment of this https://stackoverflow.com/a/26451885/3136861:
+You may ask what is the purpose of `exports` if it is the object `module` finally being exported instead of `exports`? This is being asked and explained in the comment of this https://stackoverflow.com/a/26451885/3136861:
 
 >
 > So then, what's the point of using `exports`? Why not just always use `module.exports` if it's just a variable reassignment? Seems confusing to me.
