@@ -2,6 +2,7 @@
 
 
 
+
 ### What is the difference between exports and module.exports?
 
 My understanding after reading:
@@ -18,7 +19,7 @@ https://stackoverflow.com/questions/7137397/module-exports-vs-exports-in-node-js
 
 ---
 
-Lets first answer this question: During node execution where is the variable `exports` and `module` come from?
+Lets first answer this question: *During node execution where is the variable `exports` and `module` come from?*
 
 Consider you have a module called `my-module.js`
 
@@ -28,7 +29,7 @@ const myProperty = 'foo'
 export.myProperty = myProperty
 ```
 
-During node execution you can imagine your code is copied and added to node.js internal as such [node-v0.x-archive](https://github.com/nodejs/node-v0.x-archive/blob/832ec1cd507ed344badd2ed97d3da92975650a95/src/node.js#L792-L795):
+During node execution you can imagine your code is copied and added to node.js internal:
 
 ```javascript
 NativeModule.wrapper = [
@@ -41,7 +42,7 @@ NativeModule.wrapper = [
 ];
 ```
 
-You can see above the variables `exports` and `module` is passed in as formal-parameters of the function.  During execution, this function is being called as such [see this](https://github.com/nodejs/node-v0.x-archive/blob/832ec1cd507ed344badd2ed97d3da92975650a95/src/node.js#L802), [see this](https://github.com/nodejs/node-v0.x-archive/blob/832ec1cd507ed344badd2ed97d3da92975650a95/src/node.js#L802):
+(ref: [node-v0.x-archive](https://github.com/nodejs/node-v0.x-archive/blob/832ec1cd507ed344badd2ed97d3da92975650a95/src/node.js#L792-L795)). You can see in above that the variables `exports` and `module` is passed in as formal-parameters of the function.  During execution, this function is being called::
 
 ```javascript
 const module = {
@@ -53,9 +54,7 @@ module.export = exports
 NativeModule.warpper[0](export, require, module, ....)
 ```
 
-In another word, node execution point both `exports` and `module.exports` to the same object.
-
-You can see the result of this implementation in action with:
+(ref: [this](https://github.com/nodejs/node-v0.x-archive/blob/832ec1cd507ed344badd2ed97d3da92975650a95/src/node.js#L802), [this](https://github.com/nodejs/node-v0.x-archive/blob/832ec1cd507ed344badd2ed97d3da92975650a95/src/node.js#L802)) In another word, node execution point both `exports` and `module.exports` to the same object. To show this:
 
 ```javascript
 /// try-this.js
@@ -64,7 +63,7 @@ console.dir(module)
 console.log('exports === module.exports: ', exports === module.exports)
 ```
 
-And input the `try-this.js` to node:
+Result:
 
 ```
 $ node try-this.js
@@ -86,7 +85,7 @@ module.exports.fooBar = 'Hello'
 console.log(exports)
 ```
 
-The result:
+Result:
 
 ```
 $ node try-this-2.js
@@ -100,7 +99,7 @@ Module {
 
 So if you reassign either `exports` or `module.exports` they will no longer be pointing to the same reference.
 
-This reassignment is often done in ComomnJS to simulate [ECMA script module's default export](https://nodejs.org/dist/latest-v12.x/docs/api/esm.html#esm_import_statements) so that an ECMA scripts module can perform default import from a CommonJS module:
+This kind of reassignment is often done in ComomnJS to simulate [ECMA script module's default export](https://nodejs.org/dist/latest-v12.x/docs/api/esm.html#esm_import_statements) so that an ECMA scripts module can perform default import from a CommonJS module:
 
 ```javascript
 /// folder: default-export
@@ -115,7 +114,7 @@ $ node main.mjs
 default from CommonJS
 ```
 
- ⚠️ Be aware the reassignment should always be done on the `module.exports` but not on the `exports` because it is the object `module`  finally being exported from the CommonJS module.  So if we have done the following, you would see the wrong result:
+ ⚠️ Be aware the reassignment should always be done on the `module.exports` but not on the `exports` because it is the object `module`  finally being exported from the CommonJS module.  So if we have  reassignment `exports` instead of `module.exports`, you would see the wrong result:
 
 ```javascript
 /// folder: default-export--wrong
@@ -132,9 +131,9 @@ $ node main.mjs
 {}
 ```
 
-So you may ask what is the purpose of `exports` if the object `module` is finally being exported instead of `exports`?
+You may ask what is the purpose of `exports` if it is the object `module` finally being exported instead of `exports`?
 
-This is being explained in the comment of this https://stackoverflow.com/a/26451885/3136861:
+This is being asked and explained in the comment of this https://stackoverflow.com/a/26451885/3136861:
 
 >
 > So then, what's the point of using `exports`? Why not just always use `module.exports` if it's just a variable reassignment? Seems confusing to me.
@@ -149,7 +148,17 @@ This is being explained in the comment of this https://stackoverflow.com/a/26451
 
 
 
+----
 
+### My 2016 Studies 
 
+The following are a diagram I made in 2016 when I first study this subject: 
 
+**How exports work:**
+
+<img src="imgs/how-exports-works.png" width="700px"/>
+
+#### When export stop working
+
+<img src="imgs/why-exports-wont-work.png" width="700px" />
 
