@@ -1,24 +1,24 @@
+# NodeJS: exports and module.exports
 
 
 
+### What is the difference between exports and module.exports?
 
-### During node execution where is the variable `exports` and `module` come from?
-
-### What is the difference between exports and module.exports
-
-
-
-The following is my understanding from reading:
+My understanding after reading:
 
 https://blog.tableflip.io/the-difference-between-module-exports-and-exports/
 
-and
-
 https://www.sitepoint.com/understanding-module-exports-exports-node-js/
+
+https://www.hacksparrow.com/nodejs/exports-vs-module-exports.html
+
+https://stackoverflow.com/questions/7137397/module-exports-vs-exports-in-node-js
+
+
 
 ---
 
-
+Lets first answer this question: During node execution where is the variable `exports` and `module` come from?
 
 Consider you have a module called `my-module.js`
 
@@ -146,7 +146,6 @@ This is being explained in the comment of this https://stackoverflow.com/a/26451
 > @jedd.ahyoung by adding properties to `exports` you are effectively ensuring that you are returning a "typical" module export *object*. In contrast, by using `module.exports` you can return any value you want (primitive, array, function) and not just an object (which is the format most people expect). So `module.exports` offers more power but can also be used to have your module export atypical values (like a primitive). In contrast `exports` is more limiting but safer (so long as you simply add properties to it and don't reassign it).
 >
 > – [Marcus Junius Brutus](https://stackoverflow.com/users/274677/marcus-junius-brutus)
-
 
 
 
