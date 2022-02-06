@@ -40,7 +40,7 @@ Since version 13, you can use `import` and `export` statements because ECMAScrip
 
 *Lising 2:*
 
-```json
+```javascript
 /// file: package.json
 { "type": "module" }
 
@@ -72,7 +72,7 @@ You can, however, tell nodeJS that your file is an ECMAScript modules by explici
 
 *LIsting 3:*
 
-```json
+```javascript
 /// No package.json
 
 /// file: dependee.mjs (ESM)
