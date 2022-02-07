@@ -164,3 +164,9 @@ The following are a diagram I made in 2016 when I first study this subject:
 
 <img src="imgs/why-exports-wont-work.png" width="700px" />
 
+
+
+### Here is an image I found on internet to summarize:
+
+<img src="./imgs/commonJs-export-syntex.png" />
+
